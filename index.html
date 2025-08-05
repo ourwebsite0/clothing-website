@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cairo Wear</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Saira+Stencil+One&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: rgb(0, 0, 0);
+      background-size: cover;
+      background-position: center;
+      color: white;
+      font-family: "Saira Stencil One", sans-serif;
+      scroll-snap-type: y mandatory;
+      overflow-y: auto;
+      height: 100vh;
+    }
+
+    header {
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: rgba(0,0,0,0.7);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header img {
+      height: 36px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    header h2 {
+      font-size: 18px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      margin-left: 10px;
+    }
+
+    section {
+      height: 100vh;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .hero-text {
+      text-align: center;
+    }
+
+    .hero-text h1 {
+      font-size: 22px;
+      margin: 5px 0;
+      animation: fadeInUp 1.2s ease both;
+    }
+
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cta {
+      text-align: center;
+      margin: 15px;
+    }
+
+    .cta a {
+      padding: 10px 20px;
+      background: white;
+      color: black;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .product {
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+  .product-slider {
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  display: flex;
+  scroll-behavior: smooth;
+  border-radius: 8px;
+}
+
+.slider-track {
+  display: flex;
+  width: 100%;
+}
+
+.slider-track img {
+  flex-shrink: 0;
+  width: 100%;
+  height: auto;
+  scroll-snap-align: center;
+  border-radius: 8px;
+}
+
+.slider-dots {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.slider-dots span {
+  height: 8px;
+  width: 8px;
+  margin: 0 4px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+.slider-dots span.active {
+  background-color: white;
+}
+
+    .add-to-cart {
+      background: white;
+      color: black;
+      padding: 8px;
+      border: none;
+      margin-top: 10px;
+      border-radius: 6px;
+      font-size: 14px;
+      width: 100%;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: rgba(0,0,0,0.5);
+      font-size: 12px;
+    }
+
+    #about {
+      padding: 20px;
+      text-align: center;
+      color: #ccc;
+      font-size: 14px;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s ease-out;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 767px) {
+      .product {
+        width: 90%;
+      }
+    }
+    .product-sizes {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.size-option {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 14px;
+  color: white;
+}
+
+.size-option:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.size-option.active {
+  background-color:white;
+  color: black;
+  font-weight: bold;
+  border-color: white;
+}
+
+.add-to-cart:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+  </style>
+</head>
+<body>
+  <header>
+    <nav style="flex: 1.5;">
+      <a href="#">Home</a>
+      <a href="#products">Shop</a>
+      <a href="#about">About</a>
+    </nav>
+    <div style="display: flex; align-items: center; justify-content: center; flex: 1;">
+      <img src="cairologo.png" alt="Logo">
+    </div>
+    <div style="flex: 1; text-align: right;">
+      <a href="cart.html" style="color: white; text-decoration: none; font-size: 13px;">
+<i class="fa-solid fa-cart-plus" style="color: rgba(255, 157, 0, 0.822);"></i>
+cart   <span id="cart-count">0</span>
+      </a>
+    </div>
+  </header>
+
+  <section id="hero" class="hero-section fade-in">
+    <div class="hero-text">
+      <h1>Join a World</h1>
+      <h1>Full of trendy</h1>
+      <h1>clothes.</h1>
+    </div>
+  </section>
+
+<section class="fade-in" id="products">
+  <div class="product">
+    <div class="product-slider">
+      <div class="slider-track">
+        <img src="8.PNG" alt="Product 1" />
+        <img src="528e3368-61a2-4b2d-b90d-c72067aea036.jpeg" alt="Product 2" />
+      </div>
+      <div class="slider-dots"></div>
+    </div>
+    <p>EGP 450</p>
+<div class="product-sizes">
+  <span class="size-option">S</span>
+  <span class="size-option">M</span>
+  <span class="size-option">L</span>
+  <span class="size-option">XL</span>
+</div>
+
+<button
+  class="add-to-cart"
+  data-name="Cairo T-shirt"
+  data-price="450"
+>
+  Add to Cart
+</button>
+
+</section>
+<section class="fade-in" id="products">
+  <div class="product">
+    <div class="product-slider">
+      <div class="slider-track">
+        <img src="e4ee170e-349e-4083-8b97-8acd98581ee7.jpeg" alt="Product 1" />
+        <img src="72672f66-ef69-42a3-839e-62fb0ec4ee05.jpeg" alt="Product 2" />
+      </div>
+      <div class="slider-dots"></div>
+    </div>
+    <p>EGP 450</p>
+<div class="product-sizes">
+  <span class="size-option">S</span>
+  <span class="size-option">M</span>
+  <span class="size-option">L</span>
+  <span class="size-option">XL</span>
+</div>
+
+<button
+  class="add-to-cart"
+  data-name="Cairo T-shirt"
+  data-price="450"
+>
+  Add to Cart
+</button>
+</section>
+<section class="fade-in" id="products">
+  <div class="product">
+    <div class="product-slider">
+      <div class="slider-track">
+        <img src="6.PNG" alt="Product 1" />
+        <img src="5.PNG" alt="Product 2" />
+          <img src="4.PNG" alt="Product 2" />
+
+      </div>
+      <div class="slider-dots"></div>
+    </div>
+    <p>EGP 450</p>
+<div class="product-sizes">
+  <span class="size-option">S</span>
+  <span class="size-option">M</span>
+  <span class="size-option">L</span>
+  <span class="size-option">XL</span>
+</div>
+
+<button
+  class="add-to-cart"
+  data-name="Cairo T-shirt"
+  data-price="450"
+>
+  Add to Cart
+</button>
+</section>
+<section class="fade-in" id="products">
+  <div class="product">
+    <div class="product-slider">
+      <div class="slider-track">
+        <img src="6a7fee95-dec0-4988-bc53-c8ea4b1d053e.jpeg" alt="Product 1" />
+        <img src="af940f93-e878-4c8d-ac87-5d11bdb915ad.jpeg" alt="Product 2" />
+
+      </div>
+      <div class="slider-dots"></div>
+    </div>
+    <p>EGP 450</p>
+<div class="product-sizes">
+  <span class="size-option">S</span>
+  <span class="size-option">M</span>
+  <span class="size-option">L</span>
+  <span class="size-option">XL</span>
+</div>
+<button
+  class="add-to-cart"
+  data-name="Cairo T-shirt"
+  data-price="450"
+>
+  Add to Cart
+</button>
+</section>
+
+  <section id="about" class="fade-in">
+    <h2>About us</h2>
+    <p>Cairo Wear isn't just a clothing brand – it's a statement. Crafted with love, worn with pride. </p>
+  </section>
+
+  <footer>© 2025 Cairo Wear. All rights reserved.</footer>
+
+<script>
+  // Fade-in animation
+  const elements = document.querySelectorAll('.fade-in');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      } else {
+        entry.target.classList.remove('visible');
+      }
+    });
+  }, { threshold: 0.2 });
+  elements.forEach(el => observer.observe(el));
+
+  // تحديث عدد الكارت
+  function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    document.getElementById('cart-count').textContent = cart.length;
+  }
+
+  updateCartCount();
+
+  // إعداد المنتجات
+  document.querySelectorAll('.product').forEach(product => {
+    const sizeOptions = product.querySelectorAll('.size-option');
+    const addToCartBtn = product.querySelector('.add-to-cart');
+    let selectedSize = null;
+
+    // افتراضياً الزر مش شغال
+    addToCartBtn.disabled = true;
+
+    // لما المستخدم يختار مقاس
+    sizeOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        sizeOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        selectedSize = option.textContent;
+        addToCartBtn.disabled = false;
+      });
+    });
+
+    // عند الضغط على زر Add to Cart
+    addToCartBtn.addEventListener('click', () => {
+      if (!selectedSize) {
+        alert("Please select a size.");
+        return;
+      }
+
+     const name = addToCartBtn.dataset.name;
+const price = parseFloat(addToCartBtn.dataset.price);
+      const fullName = `${name} - Size ${selectedSize}`;
+
+      let cart = JSON.parse(localStorage.getItem('cart')) || [];
+cart.push({ name: fullName, price: parseFloat(price) });
+      localStorage.setItem('cart', JSON.stringify(cart));
+
+      updateCartCount();
+      alert(`${fullName} added to cart!`);
+
+      // Reset UI
+      selectedSize = null;
+      sizeOptions.forEach(opt => opt.classList.remove('active'));
+      addToCartBtn.disabled = true;
+    });
+  });
+
+  // Slider functionality
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.product').forEach(product => {
+      const slider = product.querySelector(".product-slider");
+      const images = product.querySelectorAll(".slider-track img");
+      const dotsContainer = product.querySelector(".slider-dots");
+
+      images.forEach((_, index) => {
+        const dot = document.createElement("span");
+        if (index === 0) dot.classList.add("active");
+        dotsContainer.appendChild(dot);
+      });
+
+      const dots = dotsContainer.querySelectorAll("span");
+
+      slider.addEventListener("scroll", () => {
+        const scrollLeft = slider.scrollLeft;
+        const width = slider.clientWidth;
+        const index = Math.round(scrollLeft / width);
+
+        dots.forEach(dot => dot.classList.remove("active"));
+        if (dots[index]) dots[index].classList.add("active");
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

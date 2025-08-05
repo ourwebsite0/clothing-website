@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Checkout | Cairo Wear</title>
+  <link rel="icon" type="image/png" href="cairologo.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(20, 20, 20, 0.95));
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      padding-top: 100px;
+      min-height: 100vh;
+    }
+
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 40px;
+      z-index: 999;
+    }
+
+    header img {
+      height: 45px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ccc;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    input, select, textarea {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      background: #222;
+      color: white;
+      font-size: 1rem;
+    }
+
+    textarea::placeholder, input::placeholder {
+      color: #aaa;
+    }
+
+    .summary {
+      margin-top: 10px;
+      font-size: 1rem;
+      text-align: right;
+    }
+
+    button {
+      background: #a3a3a3;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      margin-top: 40px;
+    }
+
+    #clear-cart {
+      background: #a3a3a3;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="nav-links">
+    <a href="index.html#home">Home</a>
+    <a href="index.html#products">Shop</a>
+    <a href="index.html#about">About</a>
+  </div>
+  <img src="cairologo.png" alt="Logo">
+  <div class="nav-links">
+ <a href="cart.html" style="display: flex; align-items: center; gap: 6px; text-decoration: none; font-weight: bold;">
+</a>
+
+  </div>
+</header>
+
+<div class="container">
+  <h1>Checkout</h1>
+  <form id="checkout-form">
+    <input type="text" name="name" placeholder="Your Name" required>
+    <input type="tel" name="phone" placeholder="Phone Number" required>
+    <input type="text" name="address" placeholder="Address" required>
+    <select id="governorate" required>
+      <option value="">Select Governorate</option>
+    </select>
+    <select id="city" required>
+      <option value="">Select City</option>
+    </select>
+    <textarea name="notes" placeholder="Additional Notes (optional)"></textarea>
+    <div class="summary" id="shipping-fee">Shipping: EGP 70</div>
+    <div class="summary" id="total-price">Total: EGP 0</div>
+    <button id="clear-cart" type="button">Clear Cart</button>
+    <button type="submit">Place Order</button>
+  </form>
+</div>
+
+<footer>
+  © 2025 Cairo Wear. All rights reserved.
+</footer>
+
+<script>
+  const governorates = {
+    "Cairo": ["Nasr City", "Heliopolis", "Maadi", "New Cairo", "Shubra"],
+    "Giza": ["Dokki", "Mohandessin", "6th October", "Sheikh Zayed"],
+    "Alexandria": ["Smouha", "Stanley", "Gleem", "Miami", "Sidi Gaber"],
+    "Dakahlia": ["Mansoura", "Talkha", "Mit Ghamr"],
+    "Red Sea": ["Hurghada", "El Gouna", "Safaga"],
+    "Beheira": ["Damanhour", "Kafr El Dawwar", "Rashid"],
+    "Fayoum": ["Fayoum City", "Tamiya", "Etsa"],
+    "Gharbia": ["Tanta", "El Mahalla", "Kafr El Zayat"],
+    "Ismailia": ["Ismailia City", "Fayed", "Qantara"],
+    "Monufia": ["Shibin El Kom", "Menouf", "Ashmoun"],
+    "Minya": ["Minya City", "Mallawi", "Beni Mazar"],
+    "Qaliubiya": ["Banha", "Qalyub", "Shubra El Kheima"],
+    "New Valley": ["Kharga", "Dakhla", "Farafra"],
+    "Suez": ["Suez City", "Ain Sokhna"],
+    "Aswan": ["Aswan City", "Edfu", "Kom Ombo"],
+    "Assiut": ["Assiut City", "Abnub", "Dairut"],
+    "Beni Suef": ["Beni Suef City", "El Wasta", "Nasser"],
+    "Port Said": ["Port Said City", "Port Fouad"],
+    "Damietta": ["Damietta City", "New Damietta", "Faraskur"],
+    "Sharkia": ["Zagazig", "10th of Ramadan", "Belbeis"],
+    "South Sinai": ["Sharm El Sheikh", "Dahab"],
+    "Kafr El Sheikh": ["Kafr El Sheikh", "Desouk"],
+    "Matruh": ["Marsa Matruh", "El Alamein"],
+    "Luxor": ["Luxor City", "Armant"],
+    "Qena": ["Qena City", "Nag Hammadi"],
+    "North Sinai": ["Arish", "Bir al-Abed"],
+    "Sohag": ["Sohag City", "Tahta", "Akhmim"]
+  };
+
+  const shippingPrice = 70;
+  const governorateSelect = document.getElementById("governorate");
+  const citySelect = document.getElementById("city");
+
+  Object.keys(governorates).forEach(gov => {
+    const opt = document.createElement("option");
+    opt.value = gov;
+    opt.textContent = gov;
+    governorateSelect.appendChild(opt);
+  });
+
+  governorateSelect.addEventListener("change", function () {
+    const selectedGov = this.value;
+    citySelect.innerHTML = `<option value="">Select City</option>`;
+    if (governorates[selectedGov]) {
+      governorates[selectedGov].forEach(city => {
+        const opt = document.createElement("option");
+        opt.value = city;
+        opt.textContent = city;
+        citySelect.appendChild(opt);
+      });
+    }
+    document.getElementById("shipping-fee").textContent = `Shipping: EGP ${shippingPrice}`;
+    updateTotal();
+  });
+
+function updateTotal() {
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+const itemsTotal = cart.reduce((sum, item) => sum + parseFloat(item.price || 0), 0);
+  const finalTotal = itemsTotal + shippingPrice;
+  document.getElementById("total-price").textContent = `Total: EGP ${finalTotal}`;
+  
+}
+
+  window.addEventListener("DOMContentLoaded", updateTotal);
+
+  document.getElementById("checkout-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const name = this.name.value;
+    const phone = this.phone.value;
+    const address = this.address.value;
+    const gov = governorateSelect.value;
+    const city = citySelect.value;
+    const notes = this.notes.value;
+
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    const total = cart.reduce((sum, item) => sum + item.price, 0) + shippingPrice;
+
+    const payload = {
+      name,
+      phone,
+      governorate: gov,
+      city,
+      address,
+      notes,
+      cartItems: cart.map(item => `- ${item.name} (${item.price} EGP)`).join("\n"),
+      total
+    };
+
+    fetch("https://script.google.com/macros/s/AKfycbweJAMhW35FrnYR15zMHQTiTkewN8GfGGUnWfGnzTL3LkOYYBbkt4VJ0qooIjDJ3Rfl/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    localStorage.setItem("customer", JSON.stringify({ name, phone, gov, city, address, notes }));
+
+    setTimeout(() => {
+      localStorage.removeItem("cart");
+      window.location.href = "thanks.html";
+    }, 800);
+  });
+
+  document.getElementById("clear-cart").addEventListener("click", function () {
+    localStorage.removeItem("cart");
+    updateTotal();
+    alert("Cart cleared");
+  });
+</script>
+
+</body>
+</html>
